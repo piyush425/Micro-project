@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+
+            color: white;
+            font-family: Lato, sans-serif;
+            background-image: url('https://i0.wp.com/novocom.top/image/aW1nLlvLmNnBuZ2lvLmNvbQ==/animated-blizzard-on-transparent-background-stock-footage-real-star-png-852_480.jpg');
+        }
+
+        #Moviename {
+            width: 47%;
+            height: 37px;
+        }
+
+        button {
+            width: 153px;
+            height: 27px;
+            background-color: #185358;
+            font-size: 22px;
+            font-weight: bold;
+            border: none;
+        }
+
+
+
+        .searchCentre {
+
+            text-align: center;
+            margin-bottom: 4%;
+        }
+
+        #show {
+            display: flex;
+            justify-content: center;
+        }
+
+        .main {
+
+            width: 507px;
+            text-align: center;
+            margin-left: 2%;
+            line-height: 3;
+            background-color: #4828285c;
+            font-family: cursive;
+            border-radius: 73px;
+        }
+
+        span {
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .title {
+            font-size: 74px;
+            font-weight: 900;
+            letter-spacing: 6.2px;
+            line-height: 2;
+        }
+
+        #error {
+            display: none;
+            margin-left: 32%;
+        }
+
+        .tag {
+            height: 124px;
+        }
+
+        #last {
+            text-align: center;
+            margin-top: 2%;
+        }
+
+        .last {
+            background-color: black;
+            background-color: #4526262e;
+            color: #7e9595;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="searchCentre">
+
+        <h1>Search For Any Movie</h1>
+        <div><input type="text" name="" id="Moviename"></div>
+        <div class="btn"><button onclick="searchMovie()">Search</button></div>
+    </div>
+    <div id="error">
+        <img src="http://www.sitesbay.com/files/404.gif" alt="">
+    </div>
+    <div id="show">
+        <div id="child"></div>
+
+    </div>
+    <div id="last"></div>
+
+</body>
+
+</html>
+<script>
+    let show_div = document.getElementById("show");
+    let child_div = document.getElementById("child");
+    let error = document.getElementById("error");
+    let last = document.getElementById("last");
+
+
+    async function searchMovie() {
+        show_div.innerHTML = null
+        last.innerHTML = null
+        let movieName = document.getElementById('Moviename').value
+
+
+
+
+
+        try {
+            let res = await fetch(`http://www.omdbapi.com/?apikey=b06cc60c&t=${movieName}`)
+            let data = await res.json();
+
+            //for poster....................................
+            div_image = document.createElement('div')
+            image = document.createElement('img')
+            image.src = data.Poster
+            div_image.append(image)
+            //title..............................................
+            let div_title = document.createElement('div')
+            div_title.innerHTML = data.Title
+            div_title.setAttribute('class', 'title')
+
+
+            //Actors............................................
+            let div = document.createElement('div')
+            div.innerHTML = `<span>Actors</span>:${data.Actors}`
+            div.setAttribute('class', 'author')
+
+
+            //Released date.....................................
+            div_r = document.createElement('div')
+            div_r.innerHTML = `<span>Released Date</span>:${data.Released}`
+            div_r.setAttribute('class', 'rel')
+
+            //imdb...........................................
+            div_imdb = document.createElement('div')
+            div_imdb.innerHTML = `<span>IMDB</span>:${data.imdbRating}`
+            div_imdb.setAttribute('class', 'imdb')
+            //watch.................................................
+            btn = document.createElement('button')
+            btn.innerHTML = 'WATCH NOW'
+            btn.setAttribute('class', 'last')
+
+
+
+
+            let div_main = document.createElement('div')
+            div_main.append(div_title, div, div_r, div_imdb)
+            div_main.setAttribute('class', 'main')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            show_div.append(div_image, div_main)
+            last.append(btn)
+            if (data.Title == undefined) {
+                show_div.style.display = 'none';
+
+                error.style.display = 'block';
+                last.style.display = 'none';
+
+            } else {
+                show_div.style.display = 'flex';
+                error.style.display = 'none';
+                last.style.display = 'block';
+
+            }
+            if (Number(data.imdbRating) > 8.5) {
+                tag = document.createElement('img')
+                tag.src = 'https://thumbs.dreamstime.com/b/golden-laurel-wreath-best-choice-award-golden-label-trophy-challenge-business-vector-illustration-design-element-sale-88742488.jpg'
+                tag.setAttribute('class', 'tag')
+                show_div.append(tag)
+
+
+            }
+
+
+
+
+
+
+        }
+        catch (err) {
+            show_div.innerHTML = null
+            //show_div.style.display = 'none'
+
+
+
+
+
+        }
+
+    }
+
+</script>
